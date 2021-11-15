@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Remove the password reveal button */
+/* https://docs.microsoft.com/en-us/microsoft-edge/web-platform/password-reveal */
+::-ms-reveal {
+    display: none;
+}

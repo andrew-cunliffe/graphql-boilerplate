@@ -1,0 +1,36 @@
+== UI Boilerplate
+
+This is a boilerplate project with several technologies. Each of the folders setup are optional to use.
+
+=== Backend
+
+Typically when building a front-end solution there is a need to integrate with either databases or other backend API services. Likewise you will want to present either a Restful API or a GraphQL API. GraphQL being the more recent and growing in popularisation.
+
+- Nest +
+  This is our backend, we have included Apollo for GraphQL.
+
+=== Frontend
+
+There are many frontend frameworks, typically these are the most common. While each has strengths and weaknesses we are not discussing which is best, just having pre-configured options, select the one you want to use anre remove the others.
+
+- Angular +
+  An opinionated framework which bundles everything you need.
+
+- Next +
+  Based on React this introduces Framework concepts with a focus on Server-Side Rendering.
+
+- Svelte +
+  Now in its 3rd version it is a strong contender in the UI space.
+
+=== Testing
+
+As we are building an Application the focus is on test-driven development (TDD) using behaviour driven frameworks for a focus on user / system behaviours over unit testing frameworks. Most projects should only need one of behaviour or unit testing with both capable of providing high quality code coverage.
+
+- Cypress + Cucumber +
+  For the user interface we are using Cypress which can drive our web browser.
+
+- Pactum +
+  For e2e testing of the backend Pactum has been chosen.
+
+- Storybook +
+  To test components and for better alignment with UI designers Storybook has also been integrated.

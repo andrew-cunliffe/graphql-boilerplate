@@ -1,0 +1,12 @@
+{
+    "defaultCommandTimeout": 250,
+    "integration": false,
+    "fixturesFolder": false,
+    "video": false,
+    "viewportWidth": 1280,
+    "viewportHeight": 1024,
+    "component": {
+        "componentFolder": "components",
+        "testFiles": "**/*.spec.tsx"
+    }
+}

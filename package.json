@@ -1,0 +1,30 @@
+{
+    "name": "ui-boilerplate",
+    "version": "0.0.1",
+    "description": "Boilerplate UI with GraphQL layer and optional Frontend Frameworks",
+    "scripts": {
+        "prepare": "husky install",
+        "format": "prettier --write \"{nest,angular}/{src,test}/**/*.{ts,tsx}\" \"**/*.{html,json}\"",
+        "lint": "(cd nest; npm run lint) && (cd angular; npm run lint)",
+        "postinstall": "(cd nest; npm i) && (cd angular; npm i) && (cd next; npm i) && (cd cypress; npm i)",
+        "test:ci": "concurrently -r -k -s first \"npm run test:angular\" \"npm run test:exec\"",
+        "test:angular": "(cd angular; npm run start:test)",
+        "test:exec": "wait-on http://localhost:4200 && (cd cypress; npm run test)"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/andrew-cunliffe/graphql-boilerplate.git"
+    },
+    "author": "Andrew Cunliffe",
+    "license": "MIT",
+    "dependencies": {
+        "@commitlint/cli": "15.0.0",
+        "husky": "7.0.4",
+        "prettier": "2.4.1",
+        "typescript": "4.4.4"
+    },
+    "devDependencies": {
+        "concurrently": "6.4.0",
+        "wait-on": "6.0.0"
+    }
+}

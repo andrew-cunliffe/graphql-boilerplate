@@ -1,0 +1,25 @@
+{
+    "name": "playground-cypress",
+    "version": "1.0.0",
+    "scripts": {
+        "start": "npx cypress open",
+        "test": "npx cypress run"
+    },
+    "dependencies": {
+        "@cucumber/cucumber": "8.0.0-rc.1",
+        "@cypress/code-coverage": "3.9.11",
+        "cucumber-json-merge": "0.0.7",
+        "cypress": "8.7.0",
+        "cypress-cucumber-preprocessor": "4.3.0"
+    },
+    "cypress-cucumber-preprocessor": {
+        "cucumberJson": {
+            "generate": true,
+            "outputFolder": ".results/report-json",
+            "filePrefix": "",
+            "fileSuffix": ".cucumber"
+        },
+        "commonPath": "common",
+        "step_definitions": "step_definitions"
+    }
+}

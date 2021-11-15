@@ -1,0 +1,26 @@
+{
+    "extends": ["next/core-web-vitals", "plugin:prettier/recommended"],
+    "plugins": ["import", "prettier", "simple-import-sort"],
+    "overrides": [
+        {
+            "files": ["**/pages/*.tsx", "*.stories.tsx"],
+            "rules": {
+                "import/no-default-export": 0
+            }
+        }
+    ],
+    "rules": {
+        "@typescript-eslint/interface-name-prefix": 0,
+        "import/no-default-export": ["error"],
+        "simple-import-sort/imports": ["error"],
+        "no-unused-expressions": ["error"],
+        "sort-keys": [
+            "error",
+            "asc",
+            {
+                "caseSensitive": true,
+                "natural": true
+            }
+        ]
+    }
+}

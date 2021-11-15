@@ -1,0 +1,10 @@
+{
+    "defaultCommandTimeout": 250,
+    "pluginsFile": "./cypress/plugins/index.ts",
+    "supportFile": "./cypress/support/index.ts",
+    "video": false,
+    "component": {
+        "testFiles": "**/*.spec.{js,ts,jsx,tsx}",
+        "componentFolder": "./src/app/shared/components"
+    }
+}

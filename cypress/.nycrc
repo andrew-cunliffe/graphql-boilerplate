@@ -1,0 +1,17 @@
+{
+    "cache": true,
+    "check-coverage": true,
+    "lines": 25,
+    "statements": 25,
+    "functions": 25,
+    "branches": 25,
+    "reporter": ["lcov", "text-summary"],
+    "report-dir": ".results",
+    "temp-dir": ".results/.nyc_output",
+    "watermarks": {
+        "lines": [50, 80],
+        "statements": [50, 80],
+        "functions": [50, 80],
+        "branches": [50, 80]
+    }
+}

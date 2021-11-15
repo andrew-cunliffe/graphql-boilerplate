@@ -1,0 +1,1002 @@
+{
+    "pipes": [],
+    "interfaces": [],
+    "injectables": [
+        {
+            "name": "DataLoadService",
+            "id": "injectable-DataLoadService-a67a0eac0fa4ff4dd0eb44fdce457829ed8bc1d6e29ebbb9314fb43f11df085afbf1a3bb768c16f61243489d8dfcb9ef4872255f7927e5ca5754fb085df3697b",
+            "file": "src/app/core/services/data-load.service.ts",
+            "properties": [
+                {
+                    "name": "queue",
+                    "defaultValue": "new BehaviorSubject<number>(0)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "BehaviorSubject<number>",
+                    "optional": false,
+                    "description": "",
+                    "line": 8,
+                    "modifierKind": [123]
+                }
+            ],
+            "methods": [
+                {
+                    "name": "decrement",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 15,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [123]
+                },
+                {
+                    "name": "increment",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 10,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [123]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { Injectable } from '@angular/core';\nimport { BehaviorSubject } from 'rxjs';\n\n@Injectable({\n    providedIn: 'root',\n})\nexport class DataLoadService {\n    public queue: BehaviorSubject<number> = new BehaviorSubject<number>(0);\n\n    public increment(): void {\n        const currentQueue = this.queue.getValue();\n        this.queue.next(currentQueue + 1);\n    }\n\n    public decrement(): void {\n        const currentQueue = this.queue.getValue();\n        if (currentQueue > 0) {\n            this.queue.next(currentQueue - 1);\n        }\n    }\n}\n",
+            "type": "injectable"
+        }
+    ],
+    "guards": [],
+    "interceptors": [
+        {
+            "name": "ApiInterceptor",
+            "id": "injectable-ApiInterceptor-3e78fa20bd1b8fb7619bdedd8c1002690ab709691c76137d64bf3003febfeb7010614002c40177c3c90ba277ecd89d3bc4a5637e926efd5c9add4a88e9345edb",
+            "file": "src/app/core/interceptors/http.interceptor.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "intercept",
+                    "args": [
+                        {
+                            "name": "req",
+                            "type": "HttpRequest<any>",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "next",
+                            "type": "HttpHandler",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<HttpEvent<any>>",
+                    "typeParameters": [],
+                    "line": 11,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "req",
+                            "type": "HttpRequest<any>",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "next",
+                            "type": "HttpHandler",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HTTP_INTERCEPTORS } from '@angular/common/http';\nimport { Injectable, NgModule } from '@angular/core';\nimport { Observable } from 'rxjs';\nimport { finalize } from 'rxjs/operators';\nimport { DataLoadService } from './../services';\n\n@Injectable()\nexport class ApiInterceptor implements HttpInterceptor {\n    constructor(private dataLoadService: DataLoadService) {}\n\n    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {\n        const apiReq: HttpRequest<any> = req.clone();\n\n        this.dataLoadService.increment();\n        return next.handle(apiReq).pipe(finalize(() => this.dataLoadService.decrement()));\n    }\n}\n\n@NgModule({\n    providers: [\n        {\n            provide: HTTP_INTERCEPTORS,\n            useClass: ApiInterceptor,\n            multi: true,\n        },\n    ],\n})\nexport class HttpInterceptorModule {}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "dataLoadService",
+                        "type": "DataLoadService",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 8,
+                "jsdoctags": [
+                    {
+                        "name": "dataLoadService",
+                        "type": "DataLoadService",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "interceptor"
+        }
+    ],
+    "classes": [],
+    "directives": [],
+    "components": [
+        {
+            "name": "AppComponent",
+            "id": "component-AppComponent-1d37e56737c8d7bbd3c5795446926db703e767c22dcacdf6135a4ceb4512d43cb143e0e434c6a816ae1fe7c6b8fb646e0401d166f1c665bdd8590ff940a80ff4",
+            "file": "src/app/app.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-root",
+            "styleUrls": [],
+            "styles": [],
+            "template": "<router-outlet></router-outlet>",
+            "templateUrl": [],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\n\n@Component({\n    selector: 'app-root',\n    template: '<router-outlet></router-outlet>',\n    styles: [],\n})\nexport class AppComponent {}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": ""
+        },
+        {
+            "name": "ButtonComponent",
+            "id": "component-ButtonComponent-db8c3b7b2a2711152aac9b6e129a9064777bc041d82ab3352c44d08d0f1642c1a4ae4a7e1c8fa81f2379cafa3881f8362f93f7df697ee18537f69547d8a72f56",
+            "file": "src/app/shared/components/button/button.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-button",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": ["./button.component.html"],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\n\n@Component({\n    selector: 'app-button',\n    templateUrl: './button.component.html',\n})\nexport class ButtonComponent {}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "templateData": "<button class=\"inline-block px-6 py-3 disabled:bg-opacity-50 rounded-sm bg-red-500 hover:bg-red-600 text-white font-semibold uppercase focus:outline-none ring-offset-current focus:ring-2 focus:ring-offset-2 focus:ring-red-600\">\n    <ng-content></ng-content>\n</button>\n"
+        },
+        {
+            "name": "LandingComponent",
+            "id": "component-LandingComponent-2a6d83ce735392f67abb8935c609033c32f2821e1d30ab37587fb267ba1ba60bb9a919a5a427a54711ff608b0ce8d15068397cada73cabf8b399c3b7d7c0e12e",
+            "file": "src/app/modules/public/components/landing/landing.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": ["./landing.component.html"],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\n\n@Component({\n    templateUrl: './landing.component.html',\n})\nexport class LandingComponent {}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "templateData": "<h1>Welcome</h1>\n\n<p>Lorem Ipsum</p>\n"
+        },
+        {
+            "name": "LoaderComponent",
+            "id": "component-LoaderComponent-131196e577bd883d8fee3b6e8c9764689544ae4aa3b27f34f8c3f7035ad75a5fe0376c0a446381e963a8fba5fd60c59389e75ca8edfcbe5444fd5c9b67dfff51",
+            "file": "src/app/shared/components/loader/loader.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-loader",
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": ["./loader.component.html"],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "visible",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 10,
+                    "modifierKind": [123]
+                }
+            ],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\nimport { map } from 'rxjs/operators';\nimport { DataLoadService } from './../../../core/services';\n\n@Component({\n    selector: 'app-loader',\n    templateUrl: './loader.component.html',\n})\nexport class LoaderComponent {\n    public visible = false;\n\n    constructor(private loaderService: DataLoadService) {\n        this.loaderService.queue.pipe(map((queue) => (this.visible = queue > 0))).subscribe();\n    }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "loaderService",
+                        "type": "DataLoadService",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 10,
+                "jsdoctags": [
+                    {
+                        "name": "loaderService",
+                        "type": "DataLoadService",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "templateData": "<div class=\"absolute inset-0 bg-gray-800 bg-opacity-50\" *ngIf=\"visible\">\n    <div class=\"grid h-full justify-center items-center\">\n        <fa-icon class=\"animate-spin text-8xl opacity-75\" icon=\"sync\"></fa-icon>\n    </div>\n</div>\n"
+        },
+        {
+            "name": "PublicComponent",
+            "id": "component-PublicComponent-047edcc4c1ffe931aad76cbdb5115ae356739d1ef344fec1f4338987d219fe4f4c2ea6e1348258f1819b4434913c8473de181a791b38bfe76fed2402e34cddc9",
+            "file": "src/app/modules/public/public.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "styleUrls": [],
+            "styles": [],
+            "templateUrl": ["./public.module.html"],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\n\n@Component({\n    templateUrl: './public.module.html',\n})\nexport class PublicComponent {}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "templateData": "<div class=\"grid h-screen grid-rows-layout gap-2\">\n    <header class=\"grid grid-flow-col auto-cols-max gap-4 items-center\">\n        <img class=\"h-10\" src=\"/assets/logo.png\" alt=\"Logo\" />\n        <span>Demo</span>\n    </header>\n    <main class=\"p-2\">\n        <router-outlet></router-outlet>\n    </main>\n    <footer class=\"grid items-center\">\n        <img class=\"h-10\" src=\"/assets/logo.png\" alt=\"Logo\" />\n    </footer>\n</div>\n<app-loader></app-loader>\n"
+        }
+    ],
+    "modules": [
+        {
+            "name": "AppModule",
+            "id": "module-AppModule-60cf1fd2ac90f3cd45057161b11dbbbc6977f1df2cce00be4d774f2498d9967947236ec45e81782d5ac14f94fac78094956d00ba90f9ac2996af630236073b9b",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/app.module.ts",
+            "methods": [],
+            "sourceCode": "import { HttpClientModule } from '@angular/common/http';\nimport { NgModule } from '@angular/core';\nimport { BrowserModule } from '@angular/platform-browser';\nimport { AppRoutingModule } from './app-routing.module';\nimport { AppComponent } from './app.component';\nimport { HttpInterceptorModule } from './core/interceptors';\n\n@NgModule({\n    declarations: [AppComponent],\n    imports: [BrowserModule, AppRoutingModule, HttpClientModule, HttpInterceptorModule],\n    providers: [],\n    bootstrap: [AppComponent],\n})\nexport class AppModule {}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "AppComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "AppRoutingModule"
+                        },
+                        {
+                            "name": "HttpInterceptorModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": [
+                        {
+                            "name": "AppComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "AppRoutingModule",
+            "id": "module-AppRoutingModule-ae4a2d821d0528ba26a63b44289abdd83b946590166f8ad86cfe5503288bb7535ffe5040474aec775bd412a92b9252eb62cba14ed5e6cfedf3d6a6ac45046c25",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/app-routing.module.ts",
+            "methods": [],
+            "sourceCode": "import { NgModule } from '@angular/core';\nimport { RouterModule, Routes } from '@angular/router';\n\nconst routes: Routes = [\n    {\n        path: '',\n        loadChildren: () => \"import('./modules/public/public.module').then((module) => module.PublicModule)\",\n    },\n];\n\n@NgModule({\n    imports: [RouterModule.forRoot(routes)],\n    exports: [RouterModule],\n})\nexport class AppRoutingModule {}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "ButtonModule",
+            "id": "module-ButtonModule-847903b9e796807f454950234a8444dbfbc4ffdf4a1d86d962bb0373209fe97b46e3106a29621857eef50e6862bde7bda66e22918a615de0315f008ce4778fab",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/shared/components/button/button.module.ts",
+            "methods": [],
+            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { NgModule } from '@angular/core';\nimport { ButtonComponent } from './button.component';\n\n@NgModule({\n    declarations: [ButtonComponent],\n    imports: [CommonModule],\n    exports: [ButtonComponent],\n})\nexport class ButtonModule {}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "ButtonComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": [
+                        {
+                            "name": "ButtonComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "HttpInterceptorModule",
+            "id": "module-HttpInterceptorModule-3e78fa20bd1b8fb7619bdedd8c1002690ab709691c76137d64bf3003febfeb7010614002c40177c3c90ba277ecd89d3bc4a5637e926efd5c9add4a88e9345edb",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/core/interceptors/http.interceptor.ts",
+            "methods": [],
+            "sourceCode": "import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HTTP_INTERCEPTORS } from '@angular/common/http';\nimport { Injectable, NgModule } from '@angular/core';\nimport { Observable } from 'rxjs';\nimport { finalize } from 'rxjs/operators';\nimport { DataLoadService } from './../services';\n\n@Injectable()\nexport class ApiInterceptor implements HttpInterceptor {\n    constructor(private dataLoadService: DataLoadService) {}\n\n    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {\n        const apiReq: HttpRequest<any> = req.clone();\n\n        this.dataLoadService.increment();\n        return next.handle(apiReq).pipe(finalize(() => this.dataLoadService.decrement()));\n    }\n}\n\n@NgModule({\n    providers: [\n        {\n            provide: HTTP_INTERCEPTORS,\n            useClass: ApiInterceptor,\n            multi: true,\n        },\n    ],\n})\nexport class HttpInterceptorModule {}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": [
+                        {
+                            "name": "ApiInterceptor"
+                        }
+                    ]
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "LoaderModule",
+            "id": "module-LoaderModule-34820419ae3db23ab66045c2e4e7c2b79aa2e2cfa07145846f426bac3f6df5b40f1e229f3413a58e167bb2b98ab9bd6e9c402b027c1e3c79079f0e1b42a40fdf",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/shared/components/loader/loader.module.ts",
+            "methods": [],
+            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { NgModule } from '@angular/core';\nimport { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';\nimport { faSync } from '@fortawesome/free-solid-svg-icons';\nimport { LoaderComponent } from './loader.component';\n\n@NgModule({\n    declarations: [LoaderComponent],\n    imports: [CommonModule, FontAwesomeModule],\n    exports: [LoaderComponent],\n})\nexport class LoaderModule {\n    constructor(library: FaIconLibrary) {\n        library.addIcons(faSync);\n    }\n}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "LoaderComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": [
+                        {
+                            "name": "LoaderComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "PublicModule",
+            "id": "module-PublicModule-96d55a449e2693ae792d260b2ebda856568297933671d83dd08bb677cf98b79f39d6c6d9b8056db07dc5895e23997100934db5fd435ceda7cf54fa97d115d903",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/modules/public/public.module.ts",
+            "methods": [],
+            "sourceCode": "import { NgModule } from '@angular/core';\nimport { SharedModule } from '../../shared/shared.module';\nimport { LandingComponent } from './components/landing/landing.component';\nimport { PublicRoutingModule } from './public-routing.module';\nimport { PublicComponent } from './public.component';\n\n@NgModule({\n    declarations: [PublicComponent, LandingComponent],\n    imports: [PublicRoutingModule, SharedModule],\n})\nexport class PublicModule {}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "LandingComponent"
+                        },
+                        {
+                            "name": "PublicComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "PublicRoutingModule"
+                        },
+                        {
+                            "name": "SharedModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "PublicRoutingModule",
+            "id": "module-PublicRoutingModule-6858ec67c626eff61ea10eb4e6d00d4a2d49dc8d9608d4cacbe2121994c77cfd6c95cf5555501ffc53e5bc9f105f46f122bf761445c46ea3183a7e21a88d3c51",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/modules/public/public-routing.module.ts",
+            "methods": [],
+            "sourceCode": "import { NgModule } from '@angular/core';\nimport { RouterModule, Routes } from '@angular/router';\nimport { LandingComponent } from './components/landing/landing.component';\nimport { PublicComponent } from './public.component';\n\nconst routes: Routes = [\n    {\n        path: '',\n        component: PublicComponent,\n        children: [\n            {\n                path: '',\n                component: LandingComponent,\n            },\n        ],\n    },\n];\n\n@NgModule({\n    imports: [RouterModule.forChild(routes)],\n    exports: [RouterModule],\n})\nexport class PublicRoutingModule {}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "SharedModule",
+            "id": "module-SharedModule-63b783d0a04438990203863143326f062414cbb1b2561de25e9d9819a636787bc9f2524d8794868cc56817165f0db99ba1bc16df9d02814572f651d1d4c28f62",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/shared/shared.module.ts",
+            "methods": [],
+            "sourceCode": "import { NgModule } from '@angular/core';\nimport { ButtonModule, LoaderModule } from './components';\n\n@NgModule({\n    imports: [ButtonModule, LoaderModule],\n    exports: [ButtonModule, LoaderModule],\n})\nexport class SharedModule {}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "ButtonModule"
+                        },
+                        {
+                            "name": "LoaderModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": [
+                        {
+                            "name": "ButtonModule"
+                        },
+                        {
+                            "name": "LoaderModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        }
+    ],
+    "miscellaneous": {
+        "variables": [
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/shared/components/button/button.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/shared/components/loader/loader.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.prod.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "object",
+                "defaultValue": "{\n  production: true\n}"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "object",
+                "defaultValue": "{\n  production: false\n}"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/shared/components/button/button.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story<ButtonComponent>",
+                "defaultValue": "(props: ButtonComponent) => {\n    return { props, template: `<app-button>Test</app-button>` };\n}"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/shared/components/loader/loader.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story<LoaderComponent>",
+                "defaultValue": "(props: LoaderComponent) => ({ props })"
+            }
+        ],
+        "functions": [],
+        "typealiases": [],
+        "enumerations": [],
+        "groupedVariables": {
+            "src/app/shared/components/button/button.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/shared/components/button/button.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/shared/components/button/button.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story<ButtonComponent>",
+                    "defaultValue": "(props: ButtonComponent) => {\n    return { props, template: `<app-button>Test</app-button>` };\n}"
+                }
+            ],
+            "src/app/shared/components/loader/loader.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/shared/components/loader/loader.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/shared/components/loader/loader.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story<LoaderComponent>",
+                    "defaultValue": "(props: LoaderComponent) => ({ props })"
+                }
+            ],
+            "src/environments/environment.prod.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.prod.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "object",
+                    "defaultValue": "{\n  production: true\n}"
+                }
+            ],
+            "src/environments/environment.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "object",
+                    "defaultValue": "{\n  production: false\n}"
+                }
+            ]
+        },
+        "groupedFunctions": {},
+        "groupedEnumerations": {},
+        "groupedTypeAliases": {}
+    },
+    "routes": {
+        "name": "<root>",
+        "kind": "module",
+        "className": "AppModule",
+        "children": [
+            {
+                "name": "routes",
+                "filename": "src/app/app-routing.module.ts",
+                "module": "AppRoutingModule",
+                "children": [
+                    {
+                        "path": "",
+                        "loadChildren": "./modules/public/public.module#PublicModule",
+                        "children": [
+                            {
+                                "kind": "module",
+                                "children": [
+                                    {
+                                        "name": "routes",
+                                        "filename": "src/app/modules/public/public-routing.module.ts",
+                                        "module": "PublicRoutingModule",
+                                        "children": [
+                                            {
+                                                "path": "",
+                                                "component": "PublicComponent",
+                                                "children": [
+                                                    {
+                                                        "path": "",
+                                                        "component": "LandingComponent"
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "kind": "module"
+                                    }
+                                ],
+                                "module": "PublicModule"
+                            }
+                        ]
+                    }
+                ],
+                "kind": "module"
+            }
+        ]
+    },
+    "coverage": {
+        "count": 0,
+        "status": "low",
+        "files": [
+            {
+                "filePath": "src/app/app.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "AppComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/interceptors/http.interceptor.ts",
+                "type": "interceptor",
+                "linktype": "interceptor",
+                "name": "ApiInterceptor",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/services/data-load.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "DataLoadService",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/modules/public/components/landing/landing.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "LandingComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/modules/public/public.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "PublicComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/shared/components/button/button.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ButtonComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/shared/components/button/button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/shared/components/button/button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/shared/components/loader/loader.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "LoaderComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/shared/components/loader/loader.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/shared/components/loader/loader.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/environments/environment.prod.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "environment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/environments/environment.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "environment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            }
+        ]
+    }
+}
